@@ -18,6 +18,8 @@ namespace CPE200Lab1
         private bool isAfterEqual;
         private string firstOperand;
         private string operate;
+        private bool has2;
+
 
         private void resetAll()
         {
@@ -26,6 +28,7 @@ namespace CPE200Lab1
             hasDot = false;
             isAfterOperater = false;
             isAfterEqual = false;
+            has2 = false;
         }
 
         private string calculate(string operate, string firstOperand, string secondOperand, int maxOutputSize = 8)
@@ -87,6 +90,7 @@ namespace CPE200Lab1
             if (isAfterOperater)
             {
                 lblDisplay.Text = "0";
+                has2 = true;
             }
             if(lblDisplay.Text.Length is 8)
             {
@@ -104,6 +108,19 @@ namespace CPE200Lab1
 
         private void btnOperator_Click(object sender, EventArgs e)
         {
+            if(has2 == true)
+            {
+                string secondOperand = lblDisplay.Text;
+                string result = calculate(operate, firstOperand, secondOperand); ///3232332323232323232
+                if (result is "E" || result.Length > 8)
+                {
+                    lblDisplay.Text = "Error";
+                }
+                else
+                {
+                    lblDisplay.Text = result;
+                }
+            }
             if (lblDisplay.Text is "Error")
             {
                 return;
@@ -119,7 +136,7 @@ namespace CPE200Lab1
                 case "-":
                 case "X":
                 case "÷":
-                    firstOperand = lblDisplay.Text;
+                    firstOperand = lblDisplay.Text; //////////////////////////////must use
                     isAfterOperater = true;
                     break;
                 case "%":
@@ -135,8 +152,9 @@ namespace CPE200Lab1
             {
                 return;
             }
-            string secondOperand = lblDisplay.Text;
-            string result = calculate(operate, firstOperand, secondOperand);
+            string secondOperand = lblDisplay.Text;   ///*********************************เก็บค่าเลข 2
+            string result = calculate(operate, firstOperand, secondOperand); ///*****************คำนวนน
+
             if (result is "E" || result.Length > 8)
             {
                 lblDisplay.Text = "Error";
