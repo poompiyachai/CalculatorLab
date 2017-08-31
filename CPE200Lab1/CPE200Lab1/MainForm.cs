@@ -17,9 +17,10 @@ namespace CPE200Lab1
         private bool isAfterOperater;
         private bool isAfterEqual;
         private string firstOperand;
-        private string operate,oper,operm,keep1,keep2;
+        static public string operate,oper,operm,keep1,keep2;
         private bool has2,percen ;
         private double sum = 0;
+        private bool check;
 
         private void resetAll()
         {
@@ -31,93 +32,7 @@ namespace CPE200Lab1
             has2 = false;
         }
 
-        private string calculate(string operate, string firstOperand, string secondOperand, int maxOutputSize = 8)
-        {
-            keep2 = secondOperand;
-
-
-
-            switch (operate)
-            {
-                case "+":
-                    return (Convert.ToDouble(firstOperand) + Convert.ToDouble(secondOperand)).ToString();
-                case "-":
-                    return (Convert.ToDouble(firstOperand) - Convert.ToDouble(secondOperand)).ToString();
-                case "X":
-                    return (Convert.ToDouble(firstOperand) * Convert.ToDouble(secondOperand)).ToString();
-                case "÷":
-                    // Not allow devide be zero
-                    if(secondOperand != "0")
-                    {
-                        double result;
-                        string[] parts;
-                        int remainLength;
-
-                        result = (Convert.ToDouble(firstOperand) / Convert.ToDouble(secondOperand));
-                        // split between integer part and fractional part
-                        parts = result.ToString().Split('.');
-                        // if integer part length is already break max output, return error
-                        if(parts[0].Length > maxOutputSize)
-                        {
-                            return "E";
-                        }
-                        // calculate remaining space for fractional part.
-                        remainLength = maxOutputSize - parts[0].Length - 1;
-                        // trim the fractional part gracefully. =
-                        return result.ToString("N" + remainLength);
-                    }
-                    break;
-                case "%":
-                    double q = Convert.ToDouble(firstOperand);
-                    double w = Convert.ToDouble(secondOperand);
-
-                    //      double q = (firstOperand);
-                    //     double w = Convert.ToDouble(secondOperand);
-                    double e = q * w / 100;
-                   
-                    switch (oper)
-                        {
-                         
-                            case "+":
-                                return (q + e).ToString();
-                            case "-":
-                                return (q - e).ToString();
-                            case "X":
-                                return (q * e).ToString();
-                            case "÷":
-                                // Not allow devide be zero
-                                if (secondOperand != "0")
-                                {
-                                    double result;
-                                    string[] parts;
-                                    int remainLength;
-
-                                    result = (q / e);
-                                    // split between integer part and fractional part
-                                    parts = result.ToString().Split('.');
-                                    // if integer part length is already break max output, return error
-                                    if (parts[0].Length > maxOutputSize)
-                                    {
-                                        return "E";
-                                    }
-                                    // calculate remaining space for fractional part.
-                                    remainLength = maxOutputSize - parts[0].Length - 1;
-                                    // trim the fractional part gracefully. =
-                                    return result.ToString("N" + remainLength);
-                                }
-                                break;
-                           
-                                
-                        }
-                        
-                        break;
-            }
-            return "E";
-
-            
-            // return "E";
-            percen = true;
-        }
+        
         
         public MainForm()
         {
@@ -158,14 +73,22 @@ namespace CPE200Lab1
 
         private void btnOperator_Click(object sender, EventArgs e)
         {
-            operate = ((Button)sender).Text;
 
-            if (has2 == true )
+            if (((Button)sender).Text == "%")
             {
-                
+                percen = true;
+            }
+            if (has2 == true  )
+            {
+              
                 string secondOperand = lblDisplay.Text;
-                string result = calculate(operate, firstOperand, secondOperand); ///3232332323232323232
+                if(percen == true)
+                {
+                    secondOperand = (Convert.ToDouble(secondOperand) * Convert.ToDouble(firstOperand) / 100).ToString();
+                }
+                string result = CalculateEngine.calculate(operate, firstOperand, secondOperand); ///3232332323232323232
                 double m = Convert.ToDouble(result);
+                percen = false;
                 if (result is "E" || result.Length > 8)
                 {
                     lblDisplay.Text = "Error";
@@ -176,7 +99,7 @@ namespace CPE200Lab1
                 }
                 has2 = false;
                 isAfterOperater = false;
-
+                
             }
             if (lblDisplay.Text is "Error")
             {
@@ -186,36 +109,39 @@ namespace CPE200Lab1
             {
                 return;
             }
-            
+            operate = ((Button)sender).Text;
             switch (operate)
             {
-                case "+":  oper = "+";
-                    firstOperand = lblDisplay.Text; //////////////////////////////must use
-                    isAfterOperater = true;
+                case "%": operate = "%";
                     break;
-                case "-": oper = "-";
+                    
+                    
+                case "+": 
                     firstOperand = lblDisplay.Text; //////////////////////////////must use
                     isAfterOperater = true;
+                    operate = "+";
                     break;
-                case "X": oper = "X";
+                case "-": 
                     firstOperand = lblDisplay.Text; //////////////////////////////must use
                     isAfterOperater = true;
+                    operate = "-";
                     break;
-                case "÷": oper = "÷";
+                case "X": 
                     firstOperand = lblDisplay.Text; //////////////////////////////must use
                     isAfterOperater = true;
+                    operate = "X";
+                    break;
+                case "÷": 
+                    firstOperand = lblDisplay.Text; //////////////////////////////must use
+                    isAfterOperater = true;
+                    operate = "÷";
                     break;
 
 
                     firstOperand = lblDisplay.Text; //////////////////////////////must use
                     isAfterOperater = true;
                     break;
-                case "%":
-                    // your code here
-                 
-                    percen = true;
-                    isAfterOperater = true;
-                    break;
+                
                
                 
             }
@@ -233,13 +159,13 @@ namespace CPE200Lab1
             }
             
             string secondOperand = lblDisplay.Text;   ///*********************************เก็บค่าเลข 2
-
+            
             if (isAfterEqual == true)
             {
                 secondOperand = keep2;
-                
+                check = true;
             }
-            string result = calculate(operate, firstOperand, secondOperand); ///*****************คำนวนน
+            string result = CalculateEngine.calculate(operate, firstOperand, secondOperand); ///*****************คำนวนน
 
             
             if (result is "E" || result.Length > 8)
@@ -253,7 +179,11 @@ namespace CPE200Lab1
             
            
             isAfterEqual = true;
-            firstOperand = result;
+            if(check == true)
+            {
+                firstOperand = result;
+            }
+            
             
         }
 
@@ -284,10 +214,10 @@ namespace CPE200Lab1
             {
                 return;
             }
-            if (isAfterEqual)
+           /* if (isAfterEqual)
             {
                 resetAll();
-            }
+            }*/
             // already contain negative sign
             if (lblDisplay.Text.Length is 8)
             {
@@ -311,7 +241,7 @@ namespace CPE200Lab1
 
                 string secondOperand = lblDisplay.Text;
                 keep2 = secondOperand;
-                string result = calculate(operate, firstOperand, secondOperand); ///3232332323232323232
+                string result = CalculateEngine.calculate(operate, firstOperand, secondOperand); ///3232332323232323232
                // double m = Convert.ToDouble(lblDisplay.Text);
                 operate = "";
                 if (result is "E" || result.Length > 8)
@@ -357,7 +287,14 @@ namespace CPE200Lab1
                     }
                     break;
                 case "1/x":
-                    lblDisplay.Text = (1 / (Convert.ToDouble(lblDisplay.Text))).ToString();
+                    
+                    double resul = Math.Round(1 / (Convert.ToDouble(lblDisplay.Text)), 7);
+                    lblDisplay.Text = resul.ToString();
+                    break;
+                case "√":
+                    double resu = Math.Sqrt(Convert.ToDouble(lblDisplay.Text));
+                    resu = Math.Round(resu, 7);
+                    lblDisplay.Text = resu.ToString();
                     break;
 
             }
