@@ -293,8 +293,11 @@ namespace CPE200Lab1
                     break;
                 case "√":
                     double resu = Math.Sqrt(Convert.ToDouble(lblDisplay.Text));
-                    resu = Math.Round(resu, 7);
+                    int n1 = (Convert.ToInt32(lblDisplay.Text));
+                    string text = n1.ToString();
+                    resu = Math.Round(resu, 8-text.Length);
                     lblDisplay.Text = resu.ToString();
+                    isAfterEqual = true;
                     break;
 
             }
