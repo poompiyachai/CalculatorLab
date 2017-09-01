@@ -33,7 +33,17 @@ namespace CPE200Lab1
                 return "E";
             } else
             {
-                return calculate(parts[1], parts[0], parts[2], 4);
+                double sum = 0;
+                for(int i=0;i<30;i+=2)
+                {
+                    if(isNumber(parts[i+2]))
+                    {
+                        sum = sum + Convert.ToDouble(calculate(parts[i + 1], parts[i], parts[i + 2], 4));
+                        parts[i + 2] = calculate(parts[i + 1], parts[i], parts[i + 2], 4);
+                    }
+                    
+                }
+                return sum.ToString();
             }
 
         }
