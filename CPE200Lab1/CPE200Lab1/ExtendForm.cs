@@ -132,5 +132,10 @@ namespace CPE200Lab1
                 lblDisplay.Text += ".";
             }
         }
+
+        private void ExtendForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
