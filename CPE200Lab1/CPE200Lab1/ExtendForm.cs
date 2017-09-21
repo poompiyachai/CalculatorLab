@@ -14,13 +14,13 @@ namespace CPE200Lab1
     {
         private bool isNumberPart = false;
         private bool isContainDot = false;
-        public bool isSpaceAllowed = false;
-        private RPNcalculatorEngine engine;
+        private bool isSpaceAllowed = false;
+        private RPNCalculatorEngine engine;
 
         public ExtendForm()
         {
             InitializeComponent();
-            engine = new RPNcalculatorEngine();
+            engine = new RPNCalculatorEngine();
         }
 
         private bool isOperator(char ch)
@@ -60,19 +60,13 @@ namespace CPE200Lab1
             {
                 return;
             }
-            
             isNumberPart = false;
             isContainDot = false;
-           
             string current = lblDisplay.Text;
-            if (current[current.Length - 1] != ' ')
+            if (current[current.Length - 1] != ' ' || isOperator(current[current.Length - 2]))
             {
                 lblDisplay.Text += " " + ((Button)sender).Text + " ";
                 isSpaceAllowed = false;
-            }
-            else
-            {
-                lblDisplay.Text += ((Button)sender).Text;
             }
         }
 
@@ -114,6 +108,9 @@ namespace CPE200Lab1
             } else
             {
                 lblDisplay.Text = result;
+                isSpaceAllowed = true;
+                isContainDot = false;
+                isNumberPart = true;
             }
         }
 
@@ -151,16 +148,12 @@ namespace CPE200Lab1
             {
                 return;
             }
-            
-               
-            
             if(!isContainDot)
             {
                 isContainDot = true;
                 lblDisplay.Text += ".";
                 isSpaceAllowed = false;
             }
-            else lblDisplay.Text += ".";
         }
 
         private void btnSpace_Click(object sender, EventArgs e)
@@ -174,11 +167,6 @@ namespace CPE200Lab1
                 lblDisplay.Text += " ";
                 isSpaceAllowed = false;
             }
-        }
-
-        private void ExtendForm_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
